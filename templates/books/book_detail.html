@@ -1,0 +1,21 @@
+    <h2>{{ book_id.title }}</h2>
+    <img src="{{ book_id.image.url }}" alt="" width="400" height="350">
+    <p>{{ book_id.description }}</p>
+    <p>{{ book_id.quantity_page }}</p>
+    <p>{{ book_id.author }}</p>
+    <iframe src="{{ book_id.book_audio }}" frameborder="0" width="560" height="315" allowfullscreen></iframe>
+    <p>{{ book_id.created_at }}</p>
+
+    <h3>средняя оценка отзывов: {{ average_score|default:"Нет оценок" }}</h3>
+
+      <ul>
+    {% for i in book_id.reviews.all %}
+
+      <li>
+        <p>{{ i.mark }}</p>
+        <p>{{ i.review_text }}</p>
+        <p>{{ i.created_at }}</p>
+
+      </li>
+    {% endfor %}
+  </ul>
