@@ -7,7 +7,7 @@ class Books(models.Model):
     image = models.ImageField(upload_to='books/', verbose_name='Выберите изображение книги')
     quantity_page = models.PositiveIntegerField(verbose_name='Количество страниц')
     author = models.CharField(max_length=100, blank=True, verbose_name='Автор книги')
-    book_audio = models.TextField(verbose_name='Ссылка на аудиокнигу')
+    book_audio = models.TextField(verbose_name='Ссылка на аудиокнигу',null=True, blank=True,)
     created_at = models.DateTimeField(auto_now_add=True, null=True) 
 
     def __str__(self):
