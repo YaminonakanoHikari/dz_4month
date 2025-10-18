@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     
     'basket',
     'books',
+    'users'
     
 ]
 
@@ -82,7 +83,11 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+LOGIN_URL = '/users/login/'
+LOGIN_REDIRECT_URL = '/users/profile/'
+LOGOUT_REDIRECT_URL = '/users/login/'
 
+AUTH_USER_MODEL = 'users.CustomUser'
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
