@@ -1,50 +1,87 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Customer, Order
-from .forms import CustomerForm, OrderForm
+from . import models, forms
+from django.views import generic
 
-def order_list(request):
-    orders = Order.objects.all()
-    return render(request, 'order_list.html', {'orders': orders})
+# CREATE — добавить заказ
 
-def order_create(request):
-    if request.method == "POST":
-        form = OrderForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('order_list')
-    else:
-        form = OrderForm()
-    return render(request, 'order_form.html', {'form': form})
+class CreateBuy(generic.CreateView):
+    model = models.BuyedBooks
+    form_class = forms.BuyedBooksForm
+    template_name = 'basket/create_buy.html'
+    success_url = '/buy_list/'
 
-def order_update(request, pk):
-    order = get_object_or_404(Order, pk=pk)
-    if request.method == "POST":
-        form = OrderForm(request.POST, instance=order)
-        if form.is_valid():
-            form.save()
-            return redirect('order_list')
-    else:
-        form = OrderForm(instance=order)
-    return render(request, 'order_form.html', {'form': form})
-
-def custom_create(request):
-    if request.method == "POST":
-        form = CustomerForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('order_list')
-    else:
-        form = CustomerForm()
-    return render(request, 'order_form.html', {'form': form})
+# def createBuy(request):
+#     if request.method == 'POST':
+#         form = forms.BuyedBooksForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('buy_list')
+#     else:
+#         form = forms.BuyedBooksForm()
+#     return render(request, template_name='basket/create_buy.html',
+#                   context={'form': form})
 
 
+# READ — список всех заказов
+
+class BuyListView(generic.ListView):
+    model = models.BuyedBooks
+    template_name = 'basket/buy_list.html'
+    context_object_name = 'orders'
+    ordering = ['-id']
+
+# def readBuy(request):
+#     if request.method == 'GET':
+#         orders = models.BuyedBooks.objects.all().order_by('-id')
+#     return render(request, template_name='basket/buy_list.html',
+#                   context={'orders': orders})
 
 
+# UPDATE — изменить заказ
+
+class BuyUpdateView(generic.UpdateView):
+    model = models.BuyedBooks
+    form_class = forms.BuyedBooksForm
+    template_name = 'basket/update_buy.html'
+    success_url = '/buy_list/'
+
+    def get_object(self, *args, **kwargs):
+        buy_id = self.kwargs.get('id')
+        return get_object_or_404(models.BuyedBooks, id=buy_id)
+
+    def from_valid(self, form):
+        print(form.cleaned_data)
+        return super(BuyUpdateView, self). form_valid(form=form)
+
+# def updateBuy(request, id):
+#     buy_id = get_object_or_404(models.BuyedBooks, id=id)
+#     if request.method == 'POST':
+#         form = forms.BuyedBooksForm(request.POST, instance=buy_id)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('buy_list')
+#     else:
+#         form = forms.BuyedBooksForm(instance=buy_id)
+
+#     return render(request, template_name='basket/update_buy.html',
+#                   context={
+#                       'form': form,
+#                       'buy_id': buy_id,
+#                   })
 
 
-def order_delete(request, pk):
-    order = get_object_or_404(Order, pk=pk)
-    if request.method == "POST":
-        order.delete()
-        return redirect('order_list')
-    return render(request, 'order_confirm_delete.html', {'order': order})
+# DELETE — удалить заказ
+
+class DeleteBuy(generic.DeleteView):
+    template_name = 'basket/delete_buy.html'
+    success_url = '/buy_list/'
+
+    def get_object(self, *args, **kwags):
+        buy_id = self.kwargs.get('id')
+        return get_object_or_404(models.BuyedBooks, id=buy_id)
+    
+
+# def deleteBuy(request, id):
+#     buy_id = get_object_or_404(models.BuyedBooks, id=id)
+#     buy_id.delete()
+#     return redirect('buy_list')

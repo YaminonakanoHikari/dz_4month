@@ -6,5 +6,3 @@ admin.site.register(models.Reviews)
 admin.site.register(models.Person)
 admin.site.register(models.Tour)
 admin.site.register(models.Registration)
-
-# Register your models here.

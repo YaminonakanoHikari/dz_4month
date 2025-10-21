@@ -1,19 +1,25 @@
 from django.db import models
-from books.models import Books  # Импортируем модель Books
+from books.models import Books
 
-class Customer(models.Model):
-    name = models.CharField(null=True, blank=True, max_length=100, verbose_name="Имя покупателя")
-    email = models.EmailField(null=True, blank=True,verbose_name="Email")
-    phone = models.CharField(null=True, blank=True, max_length=20, verbose_name="Телефон")
+class Basket(models.Model):
+    name = models.CharField(verbose_name='Название корзины')
+    email = models.EmailField(verbose_name='Email пользователя')
+    address = models.TextField(verbose_name='Адрес доставки', blank=True)
 
     def __str__(self):
         return self.name
 
-class Order(models.Model):
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='orders')
+
+class BuyedBooks(models.Model):
+    buyer_name = models.CharField(verbose_name='Имя покупателя', max_length=100, null=True)
     book = models.ForeignKey(Books, on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField(default=1,null=True, blank=True,)
-    created_at = models.DateTimeField(auto_now_add=True,null=True, blank=True,)
+    quantity = models.PositiveIntegerField(verbose_name='Количество', default=1)
+    buying_date = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(verbose_name='Статус заказа', default='В обработке')
 
     def __str__(self):
-        return f"Заказ {self.book.title} для {self.customer.name}"
+        return f'{self.buyer_name} - {self.book}'
+    
+    class Meta:
+        verbose_name = 'купленная книга'
+        verbose_name_plural = 'купленные книги'
