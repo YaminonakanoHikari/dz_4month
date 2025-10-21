@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>{{ movie.title }}</h2>
+<p><b>Жанр:</b> {{ movie.genre }}</p>
+{% if movie.poster %}
+  <img src="{{ movie.poster.url }}" alt="{{ movie.title }}" width="300">
+{% endif %}
+<p><b>Описание:</b> {{ movie.description }}</p>
+<p><b>Рейтинг:</b> ⭐ {{ movie.rating }}</p>
+<p><b>Дата выхода:</b> {{ movie.release_date }}</p>
+<p><b>Теги:</b> {% for tag in movie.tags.all %}#{{ tag.name }} {% endfor %}</p>
+
+<hr>
+<h3>Комментарии:</h3>
+{% for comment in comments %}
+  <p><b>{{ comment.author }}</b>: {{ comment.text }}</p>
+{% empty %}
+  <p>Пока нет комментариев.</p>
+{% endfor %}
+
+{% if user.is_authenticated %}
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Добавить комментарий</button>
+  </form>
+{% else %}
+  <p><a href="{% url 'login' %}">Войдите</a>, чтобы оставить комментарий.</p>
+{% endif %}
+
+<a href="{% url 'movie_list' %}">⬅ Назад к списку</a>
+{% endblock %}
