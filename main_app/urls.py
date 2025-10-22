@@ -12,9 +12,14 @@ urlpatterns = [
     path('', include('users.urls')),
     path('', include('captcha.urls')),
     path('', include('clothes.urls')),
-    path('cine/', include('CineBoard.urls')),
-
+    path('cineboard/', include('CineBoard.urls')),
+    path('accounts/', include('django.contrib.auth.urls')),
 ]
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+from CineBoard.views import signup_view
+
+urlpatterns += [
+    path('signup/', signup_view, name='signup'),
+]

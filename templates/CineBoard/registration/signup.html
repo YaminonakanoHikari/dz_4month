@@ -1,0 +1,14 @@
+{% extends 'CineBoard/base.html' %}
+{% block content %}
+<div style="max-width:400px;margin:auto;border:1px solid #ccc;padding:20px;border-radius:10px;">
+  <h2 style="text-align:center;">Регистрация в CineBoard</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" style="width:100%;padding:8px;border:none;background:#4a90e2;color:#fff;border-radius:5px;">Создать аккаунт</button>
+  </form>
+  <p style="text-align:center;margin-top:10px;">
+    Уже есть аккаунт? <a href="{% url 'login' %}">Войти</a>
+  </p>
+</div>
+{% endblock %}

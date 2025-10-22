@@ -1,0 +1,28 @@
+{% extends 'CineBoard/base.html' %}
+{% block content %}
+<h2>{{ object.title }}</h2>
+{% if object.image %}
+<img src="{{ object.image.url }}" width="300">
+{% endif %}
+<p>{{ object.description }}</p>
+<p>Жанр: {{ object.genre }}</p>
+<p>Рейтинг: {{ object.rating }}</p>
+
+{% if user.is_authenticated %}
+    <a href="{% url 'film_edit' object.pk %}">Изменить</a>
+    <a href="{% url 'film_delete' object.pk %}">Удалить</a>
+
+    <h3>Добавить комментарий:</h3>
+    <form method="post">{% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Отправить</button>
+    </form>
+{% endif %}
+
+<h3>Комментарии:</h3>
+{% for comment in comments %}
+    <p><b>{{ comment.user.username }}:</b> {{ comment.text }}</p>
+{% empty %}
+    <p>Комментариев пока нет</p>
+{% endfor %}
+{% endblock %}

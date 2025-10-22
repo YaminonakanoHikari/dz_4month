@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ru">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <title>CineBoard</title>
+    <link rel="stylesheet" href="{% static 'CineBoard/style.css' %}">
+</head>
+<body>
+<nav>
+    <a href="{% url 'film_list' %}">Фильмы</a>
+    {% if user.is_authenticated %}
+        <a href="{% url 'film_add' %}">Добавить фильм</a>
+        <a href="{% url 'logout' %}">Выйти</a>
+    {% else %}
+        <a href="{% url 'login' %}">Войти</a>
+    {% endif %}
+</nav>
+<hr>
+{% block content %}{% endblock %}
+</body>
+</html>

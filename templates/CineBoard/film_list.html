@@ -1,0 +1,19 @@
+{% extends 'CineBoard/base.html' %}
+{% block content %}
+<h2>Список фильмов</h2>
+
+<form method="get">
+    <input type="text" name="search" placeholder="Поиск..." value="{{ request.GET.search }}">
+    <button type="submit">Найти</button>
+</form>
+
+{% for film in films %}
+<div>
+    <h3><a href="{% url 'film_detail' film.pk %}">{{ film.title }}</a></h3>
+    {% if film.image %}
+        <img src="{{ film.image.url }}" width="150">
+    {% endif %}
+    <p>{{ film.genre }} | Рейтинг: {{ film.rating }}</p>
+</div>
+{% endfor %}
+{% endblock %}
